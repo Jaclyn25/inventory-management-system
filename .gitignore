@@ -8,3 +8,4 @@ frontend/test-results/
 frontend/playwright-report/
 .vs/
 TestResults/
+submission/*.zip
