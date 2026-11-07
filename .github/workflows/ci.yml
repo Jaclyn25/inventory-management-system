@@ -7,6 +7,37 @@ on:
 permissions:
   contents: read
 jobs:
+  containers:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24'
+      - name: Generate ephemeral local database configuration
+        shell: python
+        run: |
+          import secrets
+          from pathlib import Path
+          Path('.env').write_text('POSTGRES_USER=stockroom\nPOSTGRES_DB=stockroom\nPOSTGRES_PASSWORD=' + secrets.token_hex(24) + '\n')
+      - run: docker compose up --build --detach --wait --wait-timeout 180
+      - run: node scripts/smoke.mjs
+      - name: Save container status and logs
+        if: always()
+        run: |
+          docker compose ps > container-status.txt
+          docker compose logs --no-color > containers.log
+      - uses: actions/upload-artifact@v7.0.2
+        if: always()
+        with:
+          name: container-evidence
+          path: |
+            container-status.txt
+            containers.log
+          retention-days: 14
+      - run: docker compose down
+        if: always()
   backend:
     runs-on: ubuntu-24.04
     services:
