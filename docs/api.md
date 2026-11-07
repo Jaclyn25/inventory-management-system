@@ -2,6 +2,8 @@
 
 Base URL: `/api`. OpenAPI JSON: `/openapi/v1.json`. No authentication is implemented; use only in a trusted local environment. Request and response field names use camelCase.
 
+A [captured OpenAPI schema](openapi.json) is included for offline review; the running endpoint describes the current application.
+
 ## Endpoints
 
 | Method | Route | Behavior |

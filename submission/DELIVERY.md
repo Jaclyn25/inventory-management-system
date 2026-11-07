@@ -16,8 +16,9 @@ All implementation work targets the existing `Jaclyn25/inventory-management-syst
 | [10](https://github.com/Jaclyn25/inventory-management-system/pull/10) | test/critical-flows | Browser tests and additional transaction checks | Merged, checks passed |
 | [11](https://github.com/Jaclyn25/inventory-management-system/pull/11) | chore/container-validation | Production images, Compose readiness/smoke CI | Merged, checks passed |
 | [12](https://github.com/Jaclyn25/inventory-management-system/pull/12) | chore/source-readability | Consistent frontend source formatting | Merged, checks passed |
+| [13](https://github.com/Jaclyn25/inventory-management-system/pull/13) | docs/submission-package | Documentation, screenshots, executed evidence and source packaging | Delivery PR; live status on GitHub |
 
-The documentation/source-package PR follows these code PRs on `docs/submission-package`. Its status and the final main workflow are reported in the completion handoff. Machine-readable merged PR data through PR12 is in `verification/delivery.json`.
+The documentation/source-package PR follows these code PRs on `docs/submission-package`. Its final status and the merged-main workflow are reported in the completion handoff. Machine-readable merged PR data through PR12 is in `verification/delivery.json`.
 
 ## Review and checks
 

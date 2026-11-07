@@ -12,7 +12,7 @@ Verified on **7 November 2026**. Evidence records actual executed tests; no gene
 | Playwright | **3 passed** against native app and **3 passed** against Docker app | `verification/playwright.json`, `verification/playwright-docker.json`; CI Chromium and local Edge |
 | Docker build/startup/smoke | **Pass locally on Windows and in GitHub Actions** | `verification/docker-smoke.json`, `verification/docker-status.json`; CI container artifact |
 | Windows PowerShell 5.1 configuration | Pass | Generated 48-character secret in isolated local test directory |
-| Dependency audit | No known npm/API package advisories at verification time | `verification/npm-audit.json`, NuGet audit output |
+| Dependency audit | No known npm/API package advisories at verification time | `verification/npm-audit.json`, `verification/nuget-audit.json` |
 | Actual screenshots | Seven captured and inspected | `docs/screenshots/` |
 
 Latest verified application-code PR workflow: [Validation run 42388234077](https://github.com/Jaclyn25/inventory-management-system/actions/runs/42388234077). Backend, frontend, Chromium, container and security checks passed. Its immutable head commit is recorded by GitHub; documentation delivery has its own subsequent workflow. The final merged-main run is linked in the completion report and remains available from [workflow history](https://github.com/Jaclyn25/inventory-management-system/actions/workflows/ci.yml).
