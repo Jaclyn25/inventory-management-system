@@ -14,14 +14,18 @@ public sealed class StockService(InventoryDb db, ILogger<StockService> logger)
 
     public Task<MovementView> Receive(StockInput input, Guid key) => Mutate(input, key, "in");
     public Task<MovementView> Issue(StockInput input, Guid key) => Mutate(input, key, "out");
+    public Task<MovementView> Adjust(AdjustmentInput input, Guid key) => Mutate(new(input.OperationId, input.ProductId, input.Quantity, input.Reason), key, "adjustment", input.Version);
 
-    private async Task<MovementView> Mutate(StockInput input, Guid key, string kind)
+    private async Task<MovementView> Mutate(StockInput input, Guid key, string kind, long? version = null)
     {
         if (input.OperationId == Guid.Empty || input.ProductId == Guid.Empty || key == Guid.Empty)
             throw new ApiException(400, "Operation, product and idempotency IDs must be nonempty UUIDs.");
         var reason = input.Reason.Trim();
         if (reason.Length < 3) throw new ApiException(400, "Provide a meaningful stock reason.");
-        var fingerprint = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new { Kind = kind, input.OperationId, input.ProductId, input.Quantity, Reason = reason }))));
+        var payload = kind == "adjustment"
+            ? JsonSerializer.Serialize(new { Kind = kind, input.OperationId, input.ProductId, input.Quantity, Reason = reason, Version = version })
+            : JsonSerializer.Serialize(new { Kind = kind, input.OperationId, input.ProductId, input.Quantity, Reason = reason });
+        var fingerprint = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(payload)));
         await using var tx = await db.Database.BeginTransactionAsync();
         // Serialize retries for a key before locking a product. Hash collisions only cause extra waiting.
         await db.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended({key.ToString()}, 0))");
@@ -35,9 +39,11 @@ public sealed class StockService(InventoryDb db, ILogger<StockService> logger)
         var product = await db.Products.FromSqlInterpolated($"SELECT * FROM \"Products\" WHERE \"Id\" = {input.ProductId} FOR UPDATE").SingleOrDefaultAsync()
             ?? throw new ApiException(404, "Product not found.");
         if (product.IsArchived) throw new ApiException(409, "Archived products cannot receive stock movements.");
+        if (kind == "adjustment" && product.Version != version) throw new ApiException(409, "Product changed. Refresh before adjusting its count.");
         if (kind == "out" && input.Quantity > product.Quantity) throw new ApiException(409, "Insufficient stock. Refresh the available quantity.");
         if (kind == "in" && input.Quantity > 1000000000 - product.Quantity) throw new ApiException(400, "Stock exceeds the supported quantity limit.");
-        var delta = kind == "in" ? input.Quantity : -input.Quantity;
+        var delta = kind switch { "in" => input.Quantity, "out" => -input.Quantity, _ => input.Quantity - product.Quantity };
+        if (delta == 0) throw new ApiException(400, "Count matches current stock. No adjustment is needed.");
         var before = product.Quantity;
         product.Quantity += delta;
         product.Version++;
