@@ -8,7 +8,7 @@ import { ProductForm, StockForm } from './Forms'
 import { api, money, type Product } from './api'
 import type { ReactNode } from 'react'
 
-const product: Product = { id: 'p1', sku: 'QA-100', name: 'Desk notebook', description: 'Fictional item', categoryId: 'c1', categoryName: 'Stationery', costPrice: '4.50', unitPrice: '7.20', quantity: 3, lowStockThreshold: 5, version: 1, isArchived: false, createdAt: '2026-01-01T00:00:00Z' }
+const product: Product = { id: 'p1', sku: 'QA-100', name: 'Desk notebook', description: 'Fictional item', categoryId: 'c1', categoryName: 'Stationery', costPrice: '4.50', unitPrice: '7.20', inventoryValue: '13.50', quantity: 3, lowStockThreshold: 5, version: 1, isArchived: false, createdAt: '2026-01-01T00:00:00Z' }
 function mount(node: ReactNode, path = '/products') {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } })
   return render(<QueryClientProvider client={client}><MemoryRouter initialEntries={[path]}>{node}</MemoryRouter></QueryClientProvider>)

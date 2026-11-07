@@ -1,7 +1,7 @@
 export type Category = { id: string; name: string }
 export type Product = {
   id: string; sku: string; name: string; description: string; categoryId: string; categoryName: string;
-  unitPrice: string; costPrice: string; lowStockThreshold: number; quantity: number; isArchived: boolean; version: number; createdAt: string;
+  unitPrice: string; costPrice: string; inventoryValue: string; lowStockThreshold: number; quantity: number; isArchived: boolean; version: number; createdAt: string;
 }
 export type Movement = { id: string; productId: string; sku: string; productName: string; kind: string; delta: number; quantityBefore: number; quantityAfter: number; costPrice: string; reason: string; createdAt: string }
 export type Page<T> = { items: T[]; total: number; pageNumber: number; pageSize: number }

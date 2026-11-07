@@ -12,7 +12,7 @@ public sealed record ProductInput(
     [Range(1, long.MaxValue)] long Version = 1);
 
 public sealed record ProductView(Guid Id, string Sku, string Name, string Description, Guid CategoryId, string CategoryName,
-    decimal UnitPrice, decimal CostPrice, int LowStockThreshold, int Quantity, bool IsArchived, long Version, DateTime CreatedAt);
+    decimal UnitPrice, decimal CostPrice, int LowStockThreshold, int Quantity, bool IsArchived, long Version, DateTime CreatedAt, decimal InventoryValue);
 public sealed record Page<T>(IReadOnlyList<T> Items, int Total, int PageNumber, int PageSize);
 public sealed class ProductQuery
 {

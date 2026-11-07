@@ -8,7 +8,7 @@ public sealed class ProductService(InventoryDb db)
 {
     public static IQueryable<ProductView> Views(IQueryable<Product> products) => products.Select(x => new ProductView(
         x.Id, x.Sku, x.Name, x.Description, x.CategoryId, x.Category.Name, x.UnitPrice, x.CostPrice,
-        x.LowStockThreshold, x.Quantity, x.IsArchived, x.Version, x.CreatedAt));
+        x.LowStockThreshold, x.Quantity, x.IsArchived, x.Version, x.CreatedAt, x.Quantity * x.CostPrice));
 
     public static IQueryable<Product> Filter(IQueryable<Product> products, ProductQuery query)
     {
