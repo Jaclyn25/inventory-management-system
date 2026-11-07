@@ -54,6 +54,7 @@ app.UseExceptionHandler(handler => handler.Run(async context =>
         extensions: new Dictionary<string, object?> { ["traceId"] = context.TraceIdentifier }).ExecuteAsync(context);
 }));
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
+app.UseStatusCodePages();
 app.MapOpenApi();
 app.MapControllers();
 app.Run();
