@@ -9,6 +9,17 @@ permissions:
 jobs:
   backend:
     runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: stockroom
+          POSTGRES_DB: stockroom
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports: ['5432:5432']
+        options: --health-cmd "pg_isready -U stockroom" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      INVENTORY_TEST_CONNECTION: Host=localhost;Database=stockroom;Username=stockroom
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: actions/setup-dotnet@v6.1.0
