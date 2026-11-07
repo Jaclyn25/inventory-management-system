@@ -20,7 +20,15 @@ builder.Services.AddOpenApi(o => o.AddSchemaTransformer((schema, context, _) =>
     return Task.CompletedTask;
 }));
 builder.Services.AddProblemDetails();
-builder.Services.AddDbContext<InventoryDb>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Inventory") ?? "Host=localhost;Database=stockroom"));
+var connection = builder.Configuration.GetConnectionString("Inventory") ?? new NpgsqlConnectionStringBuilder
+{
+    Host = builder.Configuration["Database:Host"] ?? "localhost",
+    Port = builder.Configuration.GetValue("Database:Port", 5432),
+    Database = builder.Configuration["POSTGRES_DB"] ?? "stockroom",
+    Username = builder.Configuration["POSTGRES_USER"] ?? "stockroom",
+    Password = builder.Configuration["POSTGRES_PASSWORD"] ?? ""
+}.ConnectionString;
+builder.Services.AddDbContext<InventoryDb>(options => options.UseNpgsql(connection));
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<StockService>();
