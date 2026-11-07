@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="12" failures="0" errors="0" time="4.7775962">
+    <testsuite name="src/Dashboard.test.tsx" timestamp="2026-11-07T16:13:18.952Z" hostname="LenovoJaclyn" tests="2" failures="0" errors="0" skipped="0" time="0.9144188">
+        <testcase classname="src/Dashboard.test.tsx" name="dashboard displays exact summary, alert counts and chart alternatives" time="0.6412116">
+        </testcase>
+        <testcase classname="src/Dashboard.test.tsx" name="report status filter requests filtered server totals" time="0.269036">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/Workspace.test.tsx" timestamp="2026-11-07T16:13:18.959Z" hostname="LenovoJaclyn" tests="10" failures="0" errors="0" skipped="0" time="3.8631774">
+        <testcase classname="src/Workspace.test.tsx" name="catalog renders stock state and sends search and filter parameters" time="1.1036385">
+        </testcase>
+        <testcase classname="src/Workspace.test.tsx" name="product form validates required fields before making a mutation" time="0.1651148">
+        </testcase>
+        <testcase classname="src/Workspace.test.tsx" name="product form sends exact decimal text and never includes a quantity" time="0.8242947">
+        </testcase>
+        <testcase classname="src/Workspace.test.tsx" name="API conflicts are visible and keep product form open" time="0.1374318">
+        </testcase>
+        <testcase classname="src/Workspace.test.tsx" name="stock out blocks quantities above available stock" time="0.5615685">
+        </testcase>
+        <testcase classname="src/Workspace.test.tsx" name="uncertain stock requests retry the same key and operation ID" time="0.6360548">
+        </testcase>
+        <testcase classname="src/Workspace.test.tsx" name="mobile navigation can open, navigate and close" time="0.3004214">
+        </testcase>
+        <testcase classname="src/Workspace.test.tsx" name="empty and API error states give useful feedback" time="0.1238592">
+        </testcase>
+        <testcase classname="src/Workspace.test.tsx" name="decimal formatting preserves large monetary values exactly" time="0.001678">
+        </testcase>
+        <testcase classname="src/Workspace.test.tsx" name="API helper exposes validation messages and handles empty responses" time="0.0053302">
+        </testcase>
+    </testsuite>
+</testsuites>

@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "base": "http://127.0.0.1:18081",
+  "totalProducts": 20,
+  "totalUnits": 1113,
+  "inventoryValue": "35632.85",
+  "checkedAt": "2026-11-07T16:12:30.495Z"
+}
