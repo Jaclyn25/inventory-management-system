@@ -48,6 +48,88 @@ namespace Stockroom.Api.Migrations
                             t.HasCheckConstraint("CK_Category_Name", "length(btrim(\"Name\")) > 0");
                         });
                 });
+
+            modelBuilder.Entity("Stockroom.Api.Data.Product", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("CostPrice")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("numeric(14,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("LowStockThreshold")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(160)
+                        .HasColumnType("character varying(160)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Sku")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("numeric(14,2)");
+
+                    b.Property<long>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("Sku")
+                        .IsUnique();
+
+                    b.HasIndex("IsArchived", "Name");
+
+                    b.ToTable("Products", t =>
+                        {
+                            t.HasCheckConstraint("CK_Product_Archive", "NOT \"IsArchived\" OR \"Quantity\" = 0");
+
+                            t.HasCheckConstraint("CK_Product_Identity", "\"Sku\" ~ '^[A-Z0-9][A-Z0-9_-]{1,39}$' AND length(btrim(\"Name\")) > 0");
+
+                            t.HasCheckConstraint("CK_Product_Prices", "\"UnitPrice\" BETWEEN 0 AND 999999999.99 AND \"CostPrice\" BETWEEN 0 AND 999999999.99");
+
+                            t.HasCheckConstraint("CK_Product_Quantity", "\"Quantity\" BETWEEN 0 AND 1000000000");
+
+                            t.HasCheckConstraint("CK_Product_Threshold", "\"LowStockThreshold\" BETWEEN 0 AND 1000000000");
+                        });
+                });
+
+            modelBuilder.Entity("Stockroom.Api.Data.Product", b =>
+                {
+                    b.HasOne("Stockroom.Api.Data.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
 #pragma warning restore 612, 618
         }
     }

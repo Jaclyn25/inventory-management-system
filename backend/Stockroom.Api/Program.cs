@@ -8,11 +8,12 @@ using Npgsql;
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddJsonConsole();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new DecimalConverter()));
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 builder.Services.AddDbContext<InventoryDb>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Inventory") ?? "Host=localhost;Database=stockroom"));
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<ProductService>();
 var app = builder.Build();
 if (builder.Configuration.GetValue<bool>("Database:Migrate"))
 {
@@ -23,7 +24,7 @@ app.UseExceptionHandler(handler => handler.Run(async context =>
 {
     var error = context.Features.Get<IExceptionHandlerFeature>()!.Error;
     var pg = (error as DbUpdateException)?.InnerException as PostgresException ?? error as PostgresException;
-    var status = error is ApiException api ? api.Status : pg?.SqlState switch
+    var status = error is ApiException api ? api.Status : error is DbUpdateConcurrencyException ? 409 : pg?.SqlState switch
     {
         PostgresErrorCodes.UniqueViolation => 409,
         PostgresErrorCodes.ForeignKeyViolation => 409,
