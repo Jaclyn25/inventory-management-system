@@ -120,6 +120,78 @@ namespace Stockroom.Api.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Stockroom.Api.Data.StockMovement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("CostPrice")
+                        .HasPrecision(14, 2)
+                        .HasColumnType("numeric(14,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Delta")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Fingerprint")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<Guid>("IdempotencyKey")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasMaxLength(160)
+                        .HasColumnType("character varying(160)");
+
+                    b.Property<int>("QuantityAfter")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QuantityBefore")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Sku")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IdempotencyKey")
+                        .IsUnique();
+
+                    b.HasIndex("ProductId", "CreatedAt");
+
+                    b.ToTable("StockMovements", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_Movement_Balance", "\"QuantityBefore\" >= 0 AND \"QuantityAfter\" BETWEEN 0 AND 1000000000 AND \"QuantityAfter\" = \"QuantityBefore\" + \"Delta\"");
+
+                            t.HasCheckConstraint("CK_Movement_Kind", "(\"Kind\" = 'in' AND \"Delta\" > 0) OR (\"Kind\" = 'out' AND \"Delta\" < 0) OR (\"Kind\" = 'adjustment' AND \"Delta\" <> 0)");
+
+                            t.HasCheckConstraint("CK_Movement_Reason", "length(btrim(\"Reason\")) BETWEEN 3 AND 500");
+                        });
+                });
+
             modelBuilder.Entity("Stockroom.Api.Data.Product", b =>
                 {
                     b.HasOne("Stockroom.Api.Data.Category", "Category")
@@ -129,6 +201,17 @@ namespace Stockroom.Api.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Stockroom.Api.Data.StockMovement", b =>
+                {
+                    b.HasOne("Stockroom.Api.Data.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 #pragma warning restore 612, 618
         }

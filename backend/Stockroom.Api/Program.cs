@@ -14,6 +14,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddDbContext<InventoryDb>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Inventory") ?? "Host=localhost;Database=stockroom"));
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<StockService>();
 var app = builder.Build();
 if (builder.Configuration.GetValue<bool>("Database:Migrate"))
 {
