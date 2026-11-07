@@ -9,18 +9,34 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddJsonConsole();
 builder.Services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new DecimalConverter()));
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(o => o.AddSchemaTransformer((schema, context, _) =>
+{
+    if (context.JsonTypeInfo.Type == typeof(decimal))
+    {
+        schema.Type = Microsoft.OpenApi.JsonSchemaType.String;
+        schema.Format = null;
+        schema.Pattern = @"^\d+\.\d{2}$";
+    }
+    return Task.CompletedTask;
+}));
 builder.Services.AddProblemDetails();
 builder.Services.AddDbContext<InventoryDb>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Inventory") ?? "Host=localhost;Database=stockroom"));
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<StockService>();
+builder.Services.AddScoped<ReportService>();
 var app = builder.Build();
 if (builder.Configuration.GetValue<bool>("Database:Migrate"))
 {
     using var scope = app.Services.CreateScope();
     await scope.ServiceProvider.GetRequiredService<InventoryDb>().Database.MigrateAsync();
 }
+if (builder.Configuration.GetValue<bool>("Database:Seed"))
+{
+    using var scope = app.Services.CreateScope();
+    await SeedData.Initialize(scope.ServiceProvider.GetRequiredService<InventoryDb>());
+}
+app.MapGet("/api/health", async (InventoryDb db) => await db.Database.CanConnectAsync() ? Results.Ok(new { status = "ready" }) : Results.StatusCode(503));
 app.UseExceptionHandler(handler => handler.Run(async context =>
 {
     var error = context.Features.Get<IExceptionHandlerFeature>()!.Error;
