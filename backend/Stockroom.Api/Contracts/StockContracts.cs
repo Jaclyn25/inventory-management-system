@@ -4,6 +4,10 @@ namespace Stockroom.Api.Contracts;
 public sealed record StockInput(Guid OperationId, Guid ProductId,
     [Range(1, 1000000000)] int Quantity,
     [Required, StringLength(500, MinimumLength = 3)] string Reason);
+public sealed record AdjustmentInput(Guid OperationId, Guid ProductId,
+    [Range(0, 1000000000)] int Quantity,
+    [Required, StringLength(500, MinimumLength = 3)] string Reason,
+    [Range(1, long.MaxValue)] long Version);
 public sealed record MovementView(Guid Id, Guid ProductId, string Sku, string ProductName, string Kind,
     int Delta, int QuantityBefore, int QuantityAfter, decimal CostPrice, string Reason, DateTime CreatedAt);
 public sealed class MovementQuery
