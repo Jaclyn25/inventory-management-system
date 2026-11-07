@@ -12,13 +12,16 @@ public sealed class StockService(InventoryDb db, ILogger<StockService> logger)
     public static IQueryable<MovementView> Views(IQueryable<StockMovement> query) => query.Select(x => new MovementView(
         x.Id, x.ProductId, x.Sku, x.ProductName, x.Kind, x.Delta, x.QuantityBefore, x.QuantityAfter, x.CostPrice, x.Reason, x.CreatedAt));
 
-    public async Task<MovementView> Receive(StockInput input, Guid key)
+    public Task<MovementView> Receive(StockInput input, Guid key) => Mutate(input, key, "in");
+    public Task<MovementView> Issue(StockInput input, Guid key) => Mutate(input, key, "out");
+
+    private async Task<MovementView> Mutate(StockInput input, Guid key, string kind)
     {
         if (input.OperationId == Guid.Empty || input.ProductId == Guid.Empty || key == Guid.Empty)
             throw new ApiException(400, "Operation, product and idempotency IDs must be nonempty UUIDs.");
         var reason = input.Reason.Trim();
         if (reason.Length < 3) throw new ApiException(400, "Provide a meaningful stock reason.");
-        var fingerprint = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new { Kind = "in", input.OperationId, input.ProductId, input.Quantity, Reason = reason }))));
+        var fingerprint = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new { Kind = kind, input.OperationId, input.ProductId, input.Quantity, Reason = reason }))));
         await using var tx = await db.Database.BeginTransactionAsync();
         // Serialize retries for a key before locking a product. Hash collisions only cause extra waiting.
         await db.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended({key.ToString()}, 0))");
@@ -32,14 +35,16 @@ public sealed class StockService(InventoryDb db, ILogger<StockService> logger)
         var product = await db.Products.FromSqlInterpolated($"SELECT * FROM \"Products\" WHERE \"Id\" = {input.ProductId} FOR UPDATE").SingleOrDefaultAsync()
             ?? throw new ApiException(404, "Product not found.");
         if (product.IsArchived) throw new ApiException(409, "Archived products cannot receive stock movements.");
-        if (input.Quantity > 1000000000 - product.Quantity) throw new ApiException(400, "Stock exceeds the supported quantity limit.");
+        if (kind == "out" && input.Quantity > product.Quantity) throw new ApiException(409, "Insufficient stock. Refresh the available quantity.");
+        if (kind == "in" && input.Quantity > 1000000000 - product.Quantity) throw new ApiException(400, "Stock exceeds the supported quantity limit.");
+        var delta = kind == "in" ? input.Quantity : -input.Quantity;
         var before = product.Quantity;
-        product.Quantity += input.Quantity;
+        product.Quantity += delta;
         product.Version++;
         var movement = new StockMovement
         {
             Id = input.OperationId, IdempotencyKey = key, Fingerprint = fingerprint, ProductId = product.Id,
-            Sku = product.Sku, ProductName = product.Name, Kind = "in", Delta = input.Quantity,
+            Sku = product.Sku, ProductName = product.Name, Kind = kind, Delta = delta,
             QuantityBefore = before, QuantityAfter = product.Quantity, CostPrice = product.CostPrice, Reason = reason
         };
         db.Movements.Add(movement);
