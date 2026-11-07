@@ -5,6 +5,12 @@ import hooks from 'eslint-plugin-react-hooks'
 export default ts.config(
   { ignores: ['dist/**', 'playwright-report/**', 'test-results/**'] },
   { files: ['**/*.{js,mjs}'], languageOptions: { globals: globals.node } },
-  js.configs.recommended, ...ts.configs.recommended,
-  { files: ['**/*.{ts,tsx}'], languageOptions: { globals: { ...globals.browser, ...globals.node } }, plugins: { 'react-hooks': hooks }, rules: { ...hooks.configs.recommended.rules } },
+  js.configs.recommended,
+  ...ts.configs.recommended,
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: { globals: { ...globals.browser, ...globals.node } },
+    plugins: { 'react-hooks': hooks },
+    rules: { ...hooks.configs.recommended.rules },
+  },
 )

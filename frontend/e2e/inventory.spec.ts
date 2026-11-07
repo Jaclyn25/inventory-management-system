@@ -3,7 +3,8 @@ import { randomUUID } from 'node:crypto'
 
 test('product creation and stock increase', async ({ page }) => {
   const suffix = randomUUID().slice(0, 8)
-  const name = `QA notebook ${suffix}`, sku = `E2E-${suffix}`
+  const name = `QA notebook ${suffix}`,
+    sku = `E2E-${suffix}`
   await page.goto('/products')
   await page.getByRole('button', { name: 'Add product', exact: true }).click()
   const dialog = page.getByRole('dialog', { name: 'Add product' })
@@ -32,14 +33,34 @@ test('product creation and stock increase', async ({ page }) => {
 })
 
 test('stock decrease and exact report verification', async ({ page, request }) => {
-  const suffix = randomUUID().slice(0, 8), sku = `E2E-OUT-${suffix}`, name = `QA dispatch ${suffix}`
+  const suffix = randomUUID().slice(0, 8),
+    sku = `E2E-OUT-${suffix}`,
+    name = `QA dispatch ${suffix}`
   const categoryResponse = await request.post('/api/categories', { data: { name: `QA reports ${suffix}` } })
   expect(categoryResponse.status()).toBe(201)
   const category = await categoryResponse.json()
-  const response = await request.post('/api/products', { data: { sku, name, description: 'Fictional dispatch test', categoryId: category.id, costPrice: '0.10', unitPrice: '0.30', lowStockThreshold: 2 } })
+  const response = await request.post('/api/products', {
+    data: {
+      sku,
+      name,
+      description: 'Fictional dispatch test',
+      categoryId: category.id,
+      costPrice: '0.10',
+      unitPrice: '0.30',
+      lowStockThreshold: 2,
+    },
+  })
   expect(response.status()).toBe(201)
   const product = await response.json()
-  const receipt = await request.post('/api/stock/in', { headers: { 'Idempotency-Key': randomUUID() }, data: { operationId: randomUUID(), productId: product.id, quantity: 10, reason: 'Fictional test receipt' } })
+  const receipt = await request.post('/api/stock/in', {
+    headers: { 'Idempotency-Key': randomUUID() },
+    data: {
+      operationId: randomUUID(),
+      productId: product.id,
+      quantity: 10,
+      reason: 'Fictional test receipt',
+    },
+  })
   expect(receipt.ok()).toBeTruthy()
   await page.goto('/products')
   await page.getByRole('textbox', { name: 'Search products' }).fill(sku)
