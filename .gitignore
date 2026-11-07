@@ -1,0 +1,10 @@
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+.env
+*.log
+frontend/test-results/
+frontend/playwright-report/
+.vs/
+TestResults/
