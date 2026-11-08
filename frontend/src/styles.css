@@ -2,32 +2,56 @@
 
 @theme {
   --color-rust: oklch(49% 0.13 41);
+  --color-brand: oklch(45% 0.16 255);
 }
+
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  color: oklch(26% 0.014 65);
-  background: oklch(97.5% 0.005 75);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  color: oklch(20% 0.015 250);
+  background: oklch(98.5% 0.004 240);
   font-synthesis: none;
-  --accent: oklch(49% 0.13 41);
-  --line: oklch(90% 0.009 70);
-  --muted: oklch(48% 0.015 65);
-  --surface: oklch(99.5% 0.002 75);
-  --tint: oklch(95% 0.025 55);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Modern Semantic Tokens */
+  --accent: oklch(45% 0.16 255);
+  --accent-hover: oklch(39% 0.16 255);
+  --accent-subtle: oklch(96% 0.025 255);
+  --line: oklch(91.5% 0.008 240);
+  --line-subtle: oklch(95% 0.005 240);
+  --muted: oklch(46% 0.015 250);
+  --muted-light: oklch(65% 0.012 250);
+  --surface: oklch(100% 0 0);
+  --canvas: oklch(98.5% 0.004 240);
+  --tint: oklch(96.5% 0.015 250);
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 oklch(0 0 0 / 0.04);
+  --shadow-sm: 0 1px 3px 0 oklch(0 0 0 / 0.06), 0 1px 2px -1px oklch(0 0 0 / 0.04);
+  --shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.06), 0 2px 4px -2px oklch(0 0 0 / 0.04);
+  --shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.08), 0 4px 6px -4px oklch(0 0 0 / 0.03);
+  --shadow-xl: 0 20px 25px -5px oklch(0 0 0 / 0.1), 0 8px 10px -6px oklch(0 0 0 / 0.04);
+  --shadow-modal: 0 25px 50px -12px oklch(0 0 0 / 0.22);
 }
+
 * {
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
-  font-size: 14px;
+  font-size: 13.5px;
   line-height: 1.5;
+  background-color: var(--canvas);
 }
+
 button,
 input,
 select,
 textarea {
   font: inherit;
 }
+
 button,
 a,
 input,
@@ -35,6 +59,7 @@ select,
 textarea {
   -webkit-tap-highlight-color: transparent;
 }
+
 button {
   display: inline-flex;
   align-items: center;
@@ -42,60 +67,89 @@ button {
   gap: 8px;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 7px;
+  border-radius: 8px;
   min-height: 38px;
-  padding: 8px 13px;
+  padding: 8px 14px;
   font-weight: 550;
   cursor: pointer;
   color: inherit;
+  box-shadow: var(--shadow-xs);
   transition:
-    background 150ms ease-out,
-    border-color 150ms ease-out;
+    background 140ms ease-out,
+    border-color 140ms ease-out,
+    box-shadow 140ms ease-out,
+    transform 100ms ease;
 }
+
 button:hover {
-  background: oklch(95% 0.009 70);
-  border-color: oklch(75% 0.02 60);
+  background: oklch(97.5% 0.005 240);
+  border-color: oklch(80% 0.015 240);
+  box-shadow: var(--shadow-sm);
 }
+
+button:active {
+  transform: scale(0.985);
+}
+
 button:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.55;
+  box-shadow: none;
+  transform: none;
 }
+
 button.primary {
   background: var(--accent);
-  color: oklch(99% 0.006 70);
+  color: oklch(99% 0.005 255);
   border-color: var(--accent);
-  box-shadow: 0 1px 2px oklch(30% 0.04 40 / 0.08);
+  box-shadow: 0 1px 3px oklch(45% 0.16 255 / 0.25);
 }
+
 button.primary:hover {
-  background: oklch(43% 0.12 41);
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  box-shadow: 0 2px 6px oklch(45% 0.16 255 / 0.35);
 }
+
 button.danger {
-  color: oklch(44% 0.16 27);
-  background: oklch(97% 0.015 25);
-  border-color: oklch(86% 0.06 25);
+  color: oklch(44% 0.18 27);
+  background: oklch(98% 0.015 25);
+  border-color: oklch(88% 0.06 25);
 }
+
+button.danger:hover {
+  background: oklch(95% 0.03 25);
+  border-color: oklch(82% 0.08 25);
+}
+
 button.icon-button {
-  width: 34px;
-  min-height: 34px;
-  padding: 6px;
+  width: 36px;
+  min-height: 36px;
+  padding: 8px;
   border-color: transparent;
   background: transparent;
+  box-shadow: none;
+  border-radius: 8px;
 }
+
 button.icon-button:hover {
-  background: oklch(94% 0.01 70);
+  background: oklch(94% 0.01 240);
+  border-color: transparent;
 }
+
 a {
   color: inherit;
   text-decoration: none;
 }
+
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 [tabindex]:focus-visible {
-  outline: 3px solid oklch(60% 0.13 50 / 0.65);
-  outline-offset: 3px;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 h1,
 h2,
@@ -161,134 +215,154 @@ strong {
 .sidebar {
   width: 238px;
   flex: 0 0 238px;
-  background: oklch(96% 0.008 75);
+  background: oklch(98% 0.003 240);
   border-right: 1px solid var(--line);
   height: 100vh;
   position: sticky;
   top: 0;
-  padding: 28px 18px 22px;
+  padding: 24px 16px 20px;
   display: flex;
   flex-direction: column;
+  transition: width 200ms ease, flex-basis 200ms ease;
 }
 .brand {
-  font-size: 25px;
-  letter-spacing: -1px;
-  font-weight: 730;
+  font-size: 22px;
+  letter-spacing: -0.6px;
+  font-weight: 750;
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 0 6px;
+  color: oklch(18% 0.015 250);
 }
 .brand-mark {
-  height: 35px;
-  width: 35px;
-  border-radius: 9px;
+  height: 36px;
+  width: 36px;
+  border-radius: 10px;
   background: var(--accent);
-  color: oklch(98% 0.01 75);
+  color: oklch(99% 0.005 255);
   display: grid;
   place-items: center;
+  box-shadow: 0 2px 5px oklch(45% 0.16 255 / 0.28);
 }
 .brand-dot {
   color: var(--accent);
-  margin-left: -10px;
+  margin-left: -9px;
 }
 .workspace {
   display: flex;
   align-items: center;
-  gap: 9px;
-  margin: 32px 0 27px;
-  padding: 13px 9px;
+  gap: 10px;
+  margin: 24px 0 22px;
+  padding: 11px 10px;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: oklch(98.5% 0.004 75);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: var(--shadow-xs);
 }
 .workspace-avatar {
-  background: oklch(88% 0.028 70);
-  border-radius: 5px;
-  width: 31px;
+  background: var(--accent-subtle);
+  color: var(--accent);
+  border-radius: 7px;
+  width: 32px;
   height: 32px;
   display: grid;
   place-items: center;
-  font-weight: 650;
+  font-weight: 700;
+  font-size: 13px;
 }
 .workspace div {
   flex: 1;
-  font-size: 12px;
+  font-size: 12.5px;
+}
+.workspace div strong {
+  display: block;
+  color: oklch(22% 0.015 250);
 }
 .workspace div span {
   display: block;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 11px;
   margin-top: 1px;
 }
 .nav-label {
-  color: var(--muted);
+  color: var(--muted-light);
   font-size: 10px;
-  font-weight: 650;
-  letter-spacing: 1.2px;
-  padding: 0 13px;
-  margin-bottom: 12px;
+  font-weight: 700;
+  letter-spacing: 1.1px;
+  padding: 0 12px;
+  margin-bottom: 10px;
 }
 nav {
   display: grid;
-  gap: 5px;
+  gap: 4px;
 }
 nav a {
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 44px;
-  padding: 10px 13px;
-  border-radius: 7px;
+  min-height: 40px;
+  padding: 9px 12px;
+  border-radius: 8px;
   font-size: 13px;
-  color: oklch(43% 0.015 65);
+  font-weight: 500;
+  color: oklch(38% 0.015 250);
+  transition: background 120ms ease, color 120ms ease;
 }
 nav a:hover {
-  background: oklch(92% 0.013 70);
+  background: oklch(95.5% 0.006 240);
+  color: oklch(18% 0.015 250);
 }
 nav a.active {
-  background: oklch(92% 0.035 55);
-  color: oklch(42% 0.12 40);
-  font-weight: 650;
+  background: var(--accent-subtle);
+  color: var(--accent);
+  font-weight: 600;
 }
 .sidebar-bottom {
   margin-top: auto;
-  padding: 24px 13px 0;
+  padding: 20px 10px 0;
   color: var(--muted);
 }
 .sidebar-bottom svg {
   color: var(--accent);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .sidebar-bottom strong {
   display: block;
   font-size: 12px;
-  color: oklch(34% 0.02 60);
+  color: oklch(25% 0.015 250);
 }
 .sidebar-bottom p {
   font-size: 11px;
-  line-height: 1.8;
-  margin-top: 5px;
+  line-height: 1.6;
+  margin-top: 4px;
 }
 .sidebar-bottom > span {
   display: block;
   font-size: 10px;
-  margin-top: 23px;
+  margin-top: 18px;
   border-top: 1px solid var(--line);
-  padding-top: 15px;
+  padding-top: 12px;
+  color: var(--muted-light);
 }
 .workspace-main {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 .topbar {
-  height: 72px;
+  height: 64px;
   border-bottom: 1px solid var(--line);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 36px;
-  background: oklch(99% 0.003 75);
+  padding: 0 32px;
+  background: var(--surface);
+  box-shadow: var(--shadow-xs);
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 .topbar > div {
   display: flex;
@@ -296,19 +370,31 @@ nav a.active {
   gap: 14px;
 }
 .breadcrumb {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
 }
 .breadcrumb span {
-  margin: 0 13px;
-  color: oklch(76% 0.015 70);
+  margin: 0 10px;
+  color: var(--line);
 }
 .breadcrumb strong {
-  color: oklch(32% 0.015 65);
-  font-weight: 500;
+  color: oklch(20% 0.015 250);
+  font-weight: 600;
 }
 .topbar-right {
+  font-size: 11.5px;
+  gap: 12px !important;
+}
+.local-indicator {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: oklch(95.5% 0.025 150);
+  color: oklch(35% 0.09 150);
+  font-weight: 550;
   font-size: 11px;
+  border: 1px solid oklch(88% 0.04 150);
 }
 .local-indicator::before {
   content: '';
@@ -316,8 +402,9 @@ nav a.active {
   height: 6px;
   width: 6px;
   border-radius: 50%;
-  background: oklch(48% 0.08 155);
-  margin-right: 7px;
+  background: oklch(52% 0.16 150);
+  margin-right: 6px;
+  box-shadow: 0 0 0 2px oklch(52% 0.16 150 / 0.2);
 }
 .user-avatar {
   width: 32px;
@@ -325,9 +412,11 @@ nav a.active {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: oklch(89% 0.025 55);
-  font-size: 10px;
-  font-weight: 650;
+  background: var(--accent-subtle);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid oklch(90% 0.03 255);
 }
 main {
   padding: 33px 36px 18px;
@@ -365,31 +454,41 @@ main {
 .panel {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 3px oklch(25% 0.02 65 / 0.015);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 150ms ease;
 }
 .toolbar {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 19px 20px;
+  gap: 12px;
+  padding: 16px 20px;
   flex-wrap: wrap;
+  background: var(--surface);
 }
 input,
 select,
 textarea {
   background: var(--surface);
   color: inherit;
-  border: 1px solid oklch(84% 0.012 65);
-  border-radius: 6px;
-  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 12px;
   width: 100%;
-  min-height: 39px;
+  min-height: 38px;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px oklch(45% 0.16 255 / 0.15);
+  outline: none;
 }
 input::placeholder,
 textarea::placeholder {
-  color: oklch(55% 0.013 65);
+  color: var(--muted-light);
 }
 select {
   cursor: pointer;
@@ -432,8 +531,8 @@ select {
   justify-content: space-between;
   padding: 10px 21px;
   border-top: 1px solid var(--line);
-  background: oklch(98% 0.004 75);
-  font-size: 11px;
+  background: oklch(98.5% 0.003 240);
+  font-size: 11.5px;
   color: var(--muted);
 }
 .checkbox {
@@ -442,10 +541,11 @@ select {
   gap: 7px;
 }
 .checkbox input {
-  width: 14px;
-  height: 14px;
-  min-height: 14px;
+  width: 15px;
+  height: 15px;
+  min-height: 15px;
   accent-color: var(--accent);
+  cursor: pointer;
 }
 .table-scroll {
   width: 100%;
@@ -454,29 +554,31 @@ select {
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: 12.5px;
   text-align: left;
 }
 th {
-  color: oklch(49% 0.015 65);
-  font-size: 10px;
-  font-weight: 550;
-  padding: 13px 20px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 12px 18px;
   white-space: nowrap;
-  background: oklch(98% 0.004 75);
+  background: oklch(98.5% 0.003 240);
   border-bottom: 1px solid var(--line);
   border-top: 1px solid var(--line);
 }
 td {
-  padding: 16px 20px;
-  border-bottom: 1px solid oklch(93% 0.007 70);
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line-subtle);
   vertical-align: middle;
 }
 tbody tr:last-child td {
   border-bottom: 0;
 }
 tbody tr:hover {
-  background: oklch(98% 0.005 70);
+  background: oklch(98.5% 0.003 240);
 }
 .numeric {
   text-align: right;
@@ -486,11 +588,12 @@ tbody tr:hover {
   display: block;
   margin-top: 4px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 400;
 }
 .product-name {
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 600;
   background: none;
   padding: 0;
   min-height: 22px;
@@ -498,6 +601,7 @@ tbody tr:hover {
   text-align: left;
   justify-content: flex-start;
   white-space: nowrap;
+  color: oklch(20% 0.015 250);
 }
 .product-name:hover {
   color: var(--accent);
@@ -507,48 +611,57 @@ tbody tr:hover {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 3px;
+  gap: 4px;
 }
 .movement-button {
-  font-size: 10px;
-  min-height: 30px;
-  padding: 5px 8px;
+  font-size: 11px;
+  font-weight: 550;
+  min-height: 32px;
+  padding: 5px 10px;
   white-space: nowrap;
+  background: var(--accent-subtle);
+  color: var(--accent);
+  border-color: oklch(88% 0.04 255);
+}
+.movement-button:hover {
+  background: oklch(92% 0.05 255);
+  border-color: oklch(80% 0.08 255);
 }
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   border: 1px solid transparent;
-  border-radius: 5px;
-  padding: 3px 7px;
-  font-size: 10px;
-  font-weight: 550;
+  border-radius: 9999px;
+  padding: 3px 9px;
+  font-size: 11px;
+  font-weight: 600;
   white-space: nowrap;
+  letter-spacing: 0.01em;
 }
 .badge > span {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: currentColor;
 }
 .badge.healthy {
-  background: oklch(95% 0.026 155);
-  color: oklch(36% 0.075 155);
-  border-color: oklch(89% 0.04 155);
+  background: oklch(96% 0.025 150);
+  color: oklch(36% 0.11 150);
+  border-color: oklch(88% 0.05 150);
 }
 .badge.low {
-  background: oklch(96% 0.041 80);
-  color: oklch(40% 0.09 65);
-  border-color: oklch(89% 0.075 80);
+  background: oklch(96% 0.035 75);
+  color: oklch(44% 0.14 65);
+  border-color: oklch(88% 0.07 75);
 }
 .badge.out {
-  background: oklch(96% 0.024 30);
-  color: oklch(43% 0.13 30);
-  border-color: oklch(89% 0.05 30);
+  background: oklch(96.5% 0.03 25);
+  color: oklch(45% 0.18 25);
+  border-color: oklch(88% 0.06 25);
 }
 .badge.archived {
-  background: oklch(94% 0.007 65);
+  background: oklch(95% 0.005 250);
   color: var(--muted);
   border-color: var(--line);
 }
@@ -559,7 +672,8 @@ tbody tr:hover {
   border-top: 1px solid var(--line);
   padding: 13px 20px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
+  background: var(--surface);
 }
 .pagination > div {
   display: flex;
@@ -567,39 +681,52 @@ tbody tr:hover {
   gap: 12px;
 }
 .pagination button {
-  min-height: 28px;
-  padding: 5px 7px;
+  min-height: 32px;
+  padding: 6px 10px;
+  border-radius: 6px;
 }
 .table-footnote {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   margin: 15px 0 0;
 }
 footer {
   display: flex;
   gap: 14px;
-  padding-top: 30px;
+  padding-top: 24px;
   margin-top: 25px;
   border-top: 1px solid var(--line);
   color: var(--muted);
-  font-size: 10px;
+  font-size: 11px;
 }
 footer > span:last-child {
   margin-left: auto;
 }
 dialog {
-  padding: 24px;
+  padding: 26px;
   color: inherit;
   width: min(580px, calc(100% - 32px));
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 14px;
   background: var(--surface);
   max-height: calc(100dvh - 40px);
   overflow-y: auto;
-  box-shadow: 0 24px 90px oklch(20% 0.02 65 / 0.2);
+  box-shadow: var(--shadow-modal);
+  animation: dialogScaleIn 160ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 dialog::backdrop {
-  background: oklch(20% 0.02 65 / 0.35);
+  background: oklch(15% 0.02 240 / 0.45);
+  backdrop-filter: blur(4px);
+}
+@keyframes dialogScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 .dialog-head {
   display: flex;
@@ -609,25 +736,28 @@ dialog::backdrop {
   margin-bottom: 14px;
 }
 .dialog-head h2 {
-  font-size: 21px;
+  font-size: 20px;
+  font-weight: 700;
+  color: oklch(18% 0.015 250);
 }
 .form-intro {
   color: var(--muted);
-  font-size: 12px;
-  margin-bottom: 22px;
-  line-height: 1.7;
+  font-size: 12.5px;
+  margin-bottom: 20px;
+  line-height: 1.6;
 }
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 17px;
+  gap: 16px;
 }
 form label {
   display: flex;
   flex-direction: column;
   gap: 6px;
   font-size: 12px;
-  font-weight: 550;
+  font-weight: 600;
+  color: oklch(25% 0.015 250);
 }
 .span-2 {
   grid-column: 1 / -1;
@@ -803,10 +933,10 @@ fieldset:disabled {
   margin-left: auto;
 }
 .category-icon {
-  background: oklch(94% 0.015 70);
+  background: var(--accent-subtle);
   padding: 8px;
-  border-radius: 6px;
-  color: var(--muted);
+  border-radius: 8px;
+  color: var(--accent);
 }
 .category-form {
   padding: 24px;
@@ -873,19 +1003,46 @@ fieldset:disabled {
   font-size: 11px;
 }
 .toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 1000;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 15px;
-  background: oklch(95% 0.028 155);
-  border: 1px solid oklch(86% 0.05 155);
-  border-radius: 8px;
-  margin-bottom: 20px;
-  font-size: 12px;
-  color: oklch(33% 0.06 155);
+  gap: 12px;
+  padding: 12px 18px;
+  background: var(--surface);
+  border: 1px solid oklch(85% 0.05 150);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  font-size: 13px;
+  font-weight: 550;
+  color: oklch(25% 0.06 150);
+  max-width: 420px;
+  width: calc(100% - 48px);
+  animation: toastSlideIn 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.toast svg {
+  color: oklch(50% 0.16 150);
+  flex-shrink: 0;
 }
 .toast .icon-button {
   margin-left: auto;
+  color: var(--muted);
+}
+.toast .icon-button:hover {
+  color: oklch(20% 0.015 250);
+  background: oklch(95% 0.01 240);
+}
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 .mobile-toggle,
 .mobile-close,
@@ -1121,73 +1278,80 @@ fieldset:disabled {
 }
 .metrics {
   margin: 0 0 25px;
-  padding: 23px 0 25px;
+  padding: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr 1.35fr 1fr;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  gap: 0;
 }
 .metrics > div {
-  padding: 0 25px;
+  padding: 0 24px;
   border-right: 1px solid var(--line);
 }
 .metrics > div:first-child {
-  padding-left: 0;
+  padding-left: 6px;
 }
 .metrics > div:last-child {
   border-right: 0;
-  padding-right: 0;
+  padding-right: 6px;
 }
 .metrics dt {
   color: var(--muted);
   font-size: 12px;
+  font-weight: 550;
 }
 .metrics dd {
-  margin: 7px 0 7px;
-  font-size: 30px;
-  letter-spacing: -0.9px;
-  font-weight: 600;
-  line-height: 1.25;
+  margin: 8px 0 6px;
+  font-size: 28px;
+  letter-spacing: -0.7px;
+  font-weight: 700;
+  line-height: 1.2;
   font-variant-numeric: tabular-nums;
+  color: oklch(18% 0.015 250);
 }
 .metrics > div > span {
-  font-size: 10px;
-  color: var(--muted);
+  font-size: 11px;
+  color: var(--muted-light);
 }
 .metrics .attention-count {
-  color: var(--accent);
+  color: oklch(50% 0.18 25);
   display: flex;
-  gap: 15px;
+  gap: 12px;
   align-items: center;
 }
 .attention-banner {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 17px 20px;
-  background: oklch(96% 0.026 70);
-  border: 1px solid oklch(87% 0.05 65);
-  border-radius: 8px;
+  padding: 16px 20px;
+  background: oklch(97% 0.02 45);
+  border: 1px solid oklch(88% 0.06 45);
+  border-radius: 10px;
   margin-bottom: 25px;
+  box-shadow: var(--shadow-xs);
 }
 .alert-icon {
-  color: var(--accent);
+  color: oklch(55% 0.18 45);
 }
 .attention-banner strong {
-  font-size: 12px;
+  font-size: 13px;
+  color: oklch(25% 0.04 45);
 }
 .attention-banner p {
   color: var(--muted);
-  font-size: 11px;
-  margin-top: 3px;
+  font-size: 12px;
+  margin-top: 2px;
 }
 .attention-banner > a {
   margin-left: auto;
   display: flex;
   gap: 8px;
   align-items: center;
-  font-size: 11px;
-  color: oklch(41% 0.1 45);
+  font-size: 12px;
+  color: var(--accent);
   white-space: nowrap;
   font-weight: 600;
 }

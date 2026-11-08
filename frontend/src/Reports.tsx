@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { Search, ArrowUpRight } from 'lucide-react'
+import { Search, ArrowUpRight, Download } from 'lucide-react'
 import {
   api,
   count,
@@ -34,6 +34,26 @@ export default function Reports() {
     fn()
     setPage(1)
   }
+  const exportValuationCsv = () => {
+    if (!products.data?.items.length) return
+    const headers = ['Product Name', 'SKU', 'Category', 'Quantity', 'Cost Price (USD)', 'Cost Value (USD)']
+    const rows = products.data.items.map((p) => [
+      `"${p.name.replace(/"/g, '""')}"`,
+      `"${p.sku}"`,
+      `"${p.categoryName}"`,
+      p.quantity,
+      p.costPrice,
+      p.inventoryValue,
+    ])
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\n')
+    const encodedUri = encodeURI(csvContent)
+    const link = document.createElement('a')
+    link.setAttribute('href', encodedUri)
+    link.setAttribute('download', `inventory_valuation_${new Date().toISOString().slice(0, 10)}.csv`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
   const data = report.data
   return (
     <>
@@ -43,10 +63,22 @@ export default function Reports() {
           <h1>Inventory reports</h1>
           <p className="muted">Understand stock health, distribution and current-cost valuation.</p>
         </div>
-        <Link className="button" to="/movements">
-          Movement history
-          <ArrowUpRight size={16} />
-        </Link>
+        <div className="heading-actions">
+          <button
+            type="button"
+            className="button"
+            disabled={!products.data?.items.length}
+            onClick={exportValuationCsv}
+            title="Export valuation items to CSV"
+          >
+            <Download size={16} />
+            Export CSV
+          </button>
+          <Link className="button" to="/movements">
+            Movement history
+            <ArrowUpRight size={16} />
+          </Link>
+        </div>
       </div>
       <div className="report-filters panel">
         <label className="search">

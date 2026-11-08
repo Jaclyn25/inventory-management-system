@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import {
   Boxes,
@@ -23,6 +23,12 @@ export default function App() {
     [message, setMessage] = useState('')
   const location = useLocation()
   const notify = (text: string) => setMessage(text)
+
+  useEffect(() => {
+    if (!message) return
+    const timer = setTimeout(() => setMessage(''), 4500)
+    return () => clearTimeout(timer)
+  }, [message])
   return (
     <div className="app-shell">
       <a className="skip-link" href="#main">
