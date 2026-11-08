@@ -1,0 +1,23 @@
+# GitHub Linguist language statistics overrides
+
+# Ensure EF Core migrations and designer files count towards C# stats
+backend/Stockroom.Api/Migrations/** linguist-generated=false
+*.Designer.cs linguist-generated=false
+
+# Exclude frontend test suites from language stats
+frontend/e2e/** linguist-vendored=true
+frontend/src/*.test.tsx linguist-vendored=true
+frontend/src/*.test.ts linguist-vendored=true
+frontend/src/test-setup.ts linguist-vendored=true
+
+# Exclude tooling configs and helper scripts from language stats
+frontend/playwright.config.ts linguist-vendored=true
+frontend/vite.config.ts linguist-vendored=true
+frontend/eslint.config.js linguist-vendored=true
+frontend/scripts/** linguist-vendored=true
+scripts/** linguist-vendored=true
+
+# Exclude generated documentation, lockfiles, and verification artifacts
+docs/openapi.json linguist-generated=true
+frontend/package-lock.json linguist-generated=true
+submission/verification/** linguist-generated=true
