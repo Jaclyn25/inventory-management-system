@@ -19,12 +19,12 @@ import { Empty, ErrorMessage, Loading, StockBadge } from './ui'
 import { StockForm } from './Forms'
 
 const palette = [
-  'oklch(49% .13 41)',
-  'oklch(55% .055 155)',
-  'oklch(68% .07 80)',
-  'oklch(48% .045 250)',
-  'oklch(72% .04 55)',
-  'oklch(64% .05 310)',
+  'oklch(50% .18 255)',
+  'oklch(58% .16 145)',
+  'oklch(68% .16 65)',
+  'oklch(55% .15 300)',
+  'oklch(62% .14 200)',
+  'oklch(56% .20 25)',
 ]
 export function Metrics({ data }: { data: Report }) {
   return (

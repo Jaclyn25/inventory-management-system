@@ -46,6 +46,16 @@ export default function Products({ notify }: { notify: (message: string) => void
     change()
     setPage(1)
   }
+  const toggleSort = (field: string) => {
+    setPage(1)
+    if (sort === field) {
+      setSort(`-${field}`)
+    } else if (sort === `-${field}`) {
+      setSort(field)
+    } else {
+      setSort(field)
+    }
+  }
   return (
     <>
       <div className="page-heading">
@@ -131,10 +141,30 @@ export default function Products({ notify }: { notify: (message: string) => void
             <table>
               <thead>
                 <tr>
-                  <th>Product</th>
+                  <th
+                    style={{ cursor: 'pointer', userSelect: 'none' }}
+                    title="Click to sort by product name"
+                    onClick={() => toggleSort('name')}
+                  >
+                    Product {sort === 'name' ? '↑' : sort === '-name' ? '↓' : ''}
+                  </th>
                   <th>Category</th>
-                  <th className="numeric">Cost / Unit price</th>
-                  <th className="numeric">Available</th>
+                  <th
+                    className="numeric"
+                    style={{ cursor: 'pointer', userSelect: 'none' }}
+                    title="Click to sort by valuation"
+                    onClick={() => toggleSort('value')}
+                  >
+                    Cost / Unit price {sort === 'value' ? '↑' : sort === '-value' ? '↓' : ''}
+                  </th>
+                  <th
+                    className="numeric"
+                    style={{ cursor: 'pointer', userSelect: 'none' }}
+                    title="Click to sort by available stock"
+                    onClick={() => toggleSort('quantity')}
+                  >
+                    Available {sort === 'quantity' ? '↑' : sort === '-quantity' ? '↓' : ''}
+                  </th>
                   <th>Status</th>
                   <th>
                     <span className="sr-only">Actions</span>

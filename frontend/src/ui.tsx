@@ -22,6 +22,11 @@ export function Dialog({
     <dialog
       ref={ref}
       aria-labelledby={titleId}
+      onClick={(e) => {
+        if (e.target === ref.current) {
+          onClose()
+        }
+      }}
       onCancel={(event) => {
         event.preventDefault()
         onClose()
